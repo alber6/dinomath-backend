@@ -7,10 +7,7 @@ const cors = require("cors");
 
 const app = express()
 
-app.use(cors({
-    origin: "http://localhost:5173", // dar permiso exclusivo a tu React
-    credentials: true // deja pasar los Tokens de seguridad
-}));
+app.use(cors());
 app.use(express.json())
 
 connectDB();
