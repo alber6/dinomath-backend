@@ -43,6 +43,25 @@ const login = async (req, res) => {
     }
 }
 
+// se añade esta función para realizar llamada a la base de datos para actualizar el Authcontext y que al dar a seguir aventura porque el navegador ya nos conoce, actualice los datos nuevos que ha hecho el usuario en otro dispositivo
+const getUserById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        // Buscamos al usuario en la base de datos
+        const user = await User.findById(id); 
+        if (!user) {
+            return res.status(404).json("Usuario no encontrado");
+        }
+        // Devolvemos el usuario actualizado
+        return res.status(200).json(user);
+    } catch (error) {
+        return res.status(500).json("Error al sincronizar usuario");
+    }
+};
+
+// No olvides exportarla al final del archivo junto a las demás:
+// module.exports = { register, login, getUserById, ... }
+
 const getUsers = async (req, res) => {
     try {
         const users = await User.find().populate("pets");
@@ -141,4 +160,4 @@ const updateUser = async (req, res) => {
     }
 }
 
-module.exports = { register, login, getUsers, deleteUser, changeRole, updateUser }
+module.exports = { register, login, getUsers, getUserById, deleteUser, changeRole, updateUser }
