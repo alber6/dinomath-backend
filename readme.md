@@ -45,7 +45,7 @@ GET /api/v1/users/:id:
 
 ## 🛠️ Instalación y Ejecución en Local
 Clonar el repositorio:
-git clone [https://github.com/alber6/DinoMath-Backend.git](https://github.com/alber6/dinomath-backend.git)
+git clone [https://github.com/alber6/dinomath-backend.git](https://github.com/alber6/dinomath-backend.git)
 
 # Instalar dependencias:
 ```bash
