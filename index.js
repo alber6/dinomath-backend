@@ -7,7 +7,22 @@ const cors = require("cors");
 
 const app = express()
 
-app.use(cors());
+// Configuración de CORS profesional
+const whiteList = [
+  "https://dinomath-dm.vercel.app", // URL de Vercel
+  "http://localhost:5173"        // Para que puedas seguir probando en tu ordenador
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Si la URL que hace la petición está en nuestra lista, le damos paso
+    if (!origin || whiteList.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("No permitido por CORS"));
+    }
+  }
+}));
 app.use(express.json())
 
 connectDB();
