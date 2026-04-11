@@ -1,0 +1,15 @@
+# Dependencias (Nunca se suben, se instalan con npm install)
+node_modules/
+
+# Variables de entorno (SEGURIDAD: Tus contraseñas y claves)
+.env
+
+# Archivos de log y temporales
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+
+# Carpetas de compilación (si usas TypeScript o similar)
+dist/
+build/
