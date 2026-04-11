@@ -26,34 +26,42 @@ MONGO_URI=tu_cadena_de_conexion_a_mongodb_atlas
 JWT_SECRET=tu_palabra_secreta_para_firmar_tokens
 `````
 
+
 # 📍 Endpoints Principales de la API
 
-Autenticación de Usuarios
-POST /api/v1/users/register: Crea una nueva cuenta de usuario con una mascota inicial.
+### Autenticación de Usuarios
+POST /api/v1/users/register: 
+- Crea una nueva cuenta de usuario con una mascota inicial.
 
-POST /api/v1/users/login: Valida credenciales y devuelve un token JWT de acceso.
+POST /api/v1/users/login: 
+- Valida credenciales y devuelve un token JWT de acceso.
 
-Gestión de Partida y Progreso
-PUT /api/v1/users/:id: Endpoint crítico para el autoguardado. Actualiza el nivel, XP, monedas y la mascota activa del usuario.
+### Gestión de Partida y Progreso
+PUT /api/v1/users/:id: 
+- Endpoint crítico para el autoguardado. Actualiza el nivel, XP, monedas y la mascota activa del usuario.
 
-GET /api/v1/users/:id: Recupera toda la información del jugador para sincronizar el estado del Frontend al iniciar sesión.
+GET /api/v1/users/:id: 
+- Recupera toda la información del jugador para sincronizar el estado del Frontend al iniciar sesión.
 
 ## 🛠️ Instalación y Ejecución en Local
 Clonar el repositorio:
-git clone [https://github.com/alber6/DinoMath-Backend.git](https://github.com/alber6/DinoMath-Backend.git)
+git clone [https://github.com/alber6/DinoMath-Backend.git](https://github.com/alber6/dinomath-backend.git)
 
 # Instalar dependencias:
+```bash
 npm install
-
+```
 
 # Arrancar el servidor
-
 ## Modo desarrollo (con recarga automática)
+```bash
 npm run dev
+```
 
 ## Modo producción
+```bash
 npm start
-
+```
 
 ☁️ Despliegue en Producción
 El backend está actualmente desplegado en Render. Es fundamental que, al desplegar en un nuevo entorno, se configuren las Environment Variables en el panel de control del hosting para que la cadena de conexión a MongoDB Atlas funcione correctamente.
