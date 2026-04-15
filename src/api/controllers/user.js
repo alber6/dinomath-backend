@@ -118,40 +118,29 @@ const updateUser = async (req, res) => {
         if (req.user.roles !== 'admin' && req.user._id.toString() !== id) {
             return res.status(403).json("No puedes modificar la partida de otro jugador.");
         }
-        // 2. Buscamos al usuario en la base de datos
+        // Buscamos al usuario en la base de datos
         const user = await User.findById(id);
         if (!user) {
             return res.status(404).json("Usuario no encontrado");
         }
-
-        // para reiniciar la coleccion si se borra la partida
-        if (req.body.pets && req.body.pets.length === 0){
-            user.pets = [];
+        // ACTUALIZAR MOCHILA (PETS)
+        // Como nuestro Frontend ya envía el array perfecto (sea vacío para reiniciar, 
+        // con la XP actualizada, o con un nuevo huevo), lo guardamos directamente.
+        if (req.body.pets) {
+            user.pets = req.body.pets;
         }
-
-        // Si React nos envía datos de la mascota activa
+        // ACTUALIZAR MASCOTA ACTIVA
+        // Actualizamos los datos del dinosaurio que el usuario tiene equipado en ese momento
         if (req.body.mascotaActiva) {
-            const { nombre, nivel, xp } = req.body.mascotaActiva;
-            // Actualizamos la mascota que está viendo en pantalla (Dashboard)
-            user.mascotaActiva = { nombre, nivel, xp };
-
-
-            if (nombre) {
-                // Buscamos si este Pokémon ya está en su "mochila" (array pets)
-                const petIndex = user.pets.findIndex(pet => pet.nombre === nombre);
-                if (petIndex !== -1) {
-                    // Como ya lo tiene actualizamos el nivel y la xp
-                    user.pets[petIndex].nivel = nivel;
-                    user.pets[petIndex].xp = xp;
-                } else {
-                    // si no está, entonces es nuevo y lo añadimos a la mochila
-                    user.pets.push({ nombre, nivel, xp });
-                }
-            }
+            user.mascotaActiva = req.body.mascotaActiva;
+        } else if (req.body.mascotaActiva === null) {
+            // Por si el frontend envía 'null' al reiniciar la partida
+            user.mascotaActiva = null; 
         }
-        // Guardamos todos los cambios de golpe en la base de datos -> al usar save(), la función bcrypt del userSchema funcionará perfectamente
+        // Guardamos todos los cambios de golpe en la base de datos
+        // Al sobreescribir el array entero (user.pets = ...), Mongoose SÍ detecta el cambio siempre.
         const userUpdated = await user.save();
-        // se devuelve el usuario actualizado
+        // Devolvemos el usuario actualizado
         return res.status(200).json(userUpdated);
 
     } catch (error) {
