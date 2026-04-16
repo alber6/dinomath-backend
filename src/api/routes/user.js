@@ -11,7 +11,7 @@ usersRouter.post("/login", login);
 // Ruta para cambiar el rol a otro usuario
 usersRouter.put("/change-role/:id", isAuth(["admin"]), changeRole);
 usersRouter.get("/", isAuth(["admin"]), getUsers);
-s
+
 // RUTAS DE USUARIO LOGUEADO
 // ruta para encontrar el usuario en base de datos y que se sincronicen los datos para seguir jugando
 usersRouter.get("/:id", isAuth(), getUserById);

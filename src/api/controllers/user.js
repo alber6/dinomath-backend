@@ -114,33 +114,34 @@ const deleteUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
-        // Verificar la seguridad
+        
         if (req.user.roles !== 'admin' && req.user._id.toString() !== id) {
             return res.status(403).json("No puedes modificar la partida de otro jugador.");
         }
-        // Buscamos al usuario en la base de datos
+        
         const user = await User.findById(id);
-        if (!user) {
-            return res.status(404).json("Usuario no encontrado");
-        }
-        // ACTUALIZAR MOCHILA (PETS)
-        // Como nuestro Frontend ya envía el array perfecto (sea vacío para reiniciar, 
-        // con la XP actualizada, o con un nuevo huevo), lo guardamos directamente.
+        if (!user) return res.status(404).json("Usuario no encontrado");
+
+        // 1. ACTUALIZAR MOCHILA CON "MARK MODIFIED" (LA BALA DE PLATA)
         if (req.body.pets) {
             user.pets = req.body.pets;
+            // 🚀 ESTO OBLIGA A MONGOOSE A GUARDAR EL ARRAY SÍ O SÍ
+            user.markModified('pets'); 
         }
-        // ACTUALIZAR MASCOTA ACTIVA
-        // Actualizamos los datos del dinosaurio que el usuario tiene equipado en ese momento
+
+        // 2. ACTUALIZAR MASCOTA ACTIVA
         if (req.body.mascotaActiva) {
             user.mascotaActiva = req.body.mascotaActiva;
+            user.markModified('mascotaActiva'); 
         } else if (req.body.mascotaActiva === null) {
-            // Por si el frontend envía 'null' al reiniciar la partida
             user.mascotaActiva = null; 
         }
-        // Guardamos todos los cambios de golpe en la base de datos
-        // Al sobreescribir el array entero (user.pets = ...), Mongoose SÍ detecta el cambio siempre.
+
         const userUpdated = await user.save();
-        // Devolvemos el usuario actualizado
+        
+        // 🔍 CHIVATO EN LA CONSOLA DEL SERVIDOR
+        console.log("✅ Partida guardada en la BD:", userUpdated.mascotaActiva.nombre, "Nivel:", userUpdated.mascotaActiva.nivel);
+
         return res.status(200).json(userUpdated);
 
     } catch (error) {
